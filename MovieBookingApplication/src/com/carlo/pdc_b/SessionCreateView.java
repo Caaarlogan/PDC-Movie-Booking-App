@@ -19,16 +19,14 @@ public class SessionCreateView extends SessionView{
     private JTextField timeSelect;
     private JButton create;
     
-    public SessionCreateView() {
+    
+    public SessionCreateView(MovieBookingModel model) {
+        super(model);
+        
         cinema = new JLabel("Cinema: ");
         cinema.setSize(300,20);
-        cinema.setLocation(10,70);
+        cinema.setLocation(10,100);
         add(cinema);
-        
-        date = new JLabel("Date: ");
-        date.setSize(300,20);
-        date.setLocation(10,100);
-        add(date);
         
         time = new JLabel("Time: ");
         time.setSize(300,20);
@@ -37,13 +35,8 @@ public class SessionCreateView extends SessionView{
         
         cinemaSelect = new JComboBox();
         cinemaSelect.setSize(300,20);
-        cinemaSelect.setLocation(75,70);
+        cinemaSelect.setLocation(75,100);
         add(cinemaSelect);
-        
-        dateSelect = new JTextField();
-        dateSelect.setSize(300,20);
-        dateSelect.setLocation(75,100);
-        add(dateSelect);
                 
         timeSelect = new JTextField();
         timeSelect.setSize(300,20);
@@ -55,7 +48,7 @@ public class SessionCreateView extends SessionView{
         create.setLocation(10,170);
         add(create);
         
-        error = new JLabel("Date format: dd/mm/yy, Time format: hh:mm (24h)");
+        error = new JLabel("Date format: dd/mm/yy, Time format: hh:mm (00-23 hours)");
         error.setSize(300,50);
         error.setLocation(10,190);
         add(error);

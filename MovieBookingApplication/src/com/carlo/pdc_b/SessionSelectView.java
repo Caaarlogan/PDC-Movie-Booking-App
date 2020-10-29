@@ -5,43 +5,37 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 /**
  * @author Carlo Carbonilla
  */
 
 public class SessionSelectView extends SessionView {
-    private JLabel date;
     private JLabel sessions;
-    private JComboBox dateSelect;
     private JList sessionSelect;
-    private DefaultListModel<String> model;
+    private DefaultListModel<String> sessionModel;
+    private JScrollPane sessionScroll;
     private JButton book;
     
-    public SessionSelectView() {
-        setLayout(null);
-        
-        date = new JLabel("Date: ");
-        date.setSize(300,20);
-        date.setLocation(10,70);
-        add(date);
+    public SessionSelectView(MovieBookingModel model) {
+        super(model);
         
         sessions = new JLabel("Sessions");
         sessions.setSize(300,20);
         sessions.setLocation(10,105);
         add(sessions);
         
-        dateSelect = new JComboBox();
-        dateSelect.setSize(300,20);
-        dateSelect.setLocation(75,70);
-        add(dateSelect);
-        
-        model = new DefaultListModel<>();
+        sessionModel = new DefaultListModel<>();
         sessionSelect = new JList();
-        sessionSelect.setModel(model);
-        sessionSelect.setSize(460,185);
-        sessionSelect.setLocation(10,130);
-        add(sessionSelect);
+        sessionSelect.setModel(sessionModel);
+        sessionScroll = new JScrollPane(sessionSelect, 
+                        ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
+                        ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        sessionScroll.setSize(460,185);
+        sessionScroll.setLocation(10,130);
+        add(sessionScroll);
         
         book = new JButton("Book");
         book.setSize(75,25);

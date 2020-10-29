@@ -5,16 +5,12 @@ import javax.swing.JFrame;
 /**
  * @author Carlo Carbonilla
  */
-public class SessionCreateController extends JFrame {
-    private MovieBookingModel model; //The model this controller will update
+public class SessionCreateController extends SessionController {
     private SessionCreateView view; //The view that shows the state of the model
     
     public SessionCreateController() {
-        model = new MovieBookingModel();
-        view = new SessionCreateView();
-        
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 400);
+        super();
+        view = new SessionCreateView(model);
         add(view);
     }
 }

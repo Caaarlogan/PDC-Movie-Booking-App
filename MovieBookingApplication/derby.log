@@ -1,14 +1,13 @@
-Thu Oct 29 14:33:13 NZDT 2020 : Apache Derby Network Server - 10.14.2.0 - (1828579) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Thu Oct 29 14:33:13 NZDT 2020:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0175-71fc-c7b2-00000a8b2918 
-on database directory C:\Users\carbo\OneDrive - AUT University\COMP603\PDC-Movie-Booking-App\MovieBookingApplication\MovieBookingAppDB with class loader sun.misc.Launcher$AppClassLoader@1d44bcfa 
-Loaded from file:/C:/Users/carbo/OneDrive%20-%20AUT%20University/COMP603/db-derby-10.14.2.0-bin/db-derby-10.14.2.0-bin/lib/derby.jar
+Thu Oct 29 20:02:14 NZDT 2020:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0175-732a-007c-00000ddb4670 
+on database directory C:\Users\carbo\OneDrive - AUT University\COMP603\PDC-Movie-Booking-App\MovieBookingApplication\MovieBookingAppDB with class loader sun.misc.Launcher$AppClassLoader@5c647e05 
+Loaded from file:/C:/Users/carbo/OneDrive%20-%20AUT%20University/COMP603/PDC-Movie-Booking-App/MovieBookingApplication/lib/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_261-b12
-user.dir=C:\Users\carbo\OneDrive - AUT University\COMP603\db-derby-10.14.2.0-bin\db-derby-10.14.2.0-bin
+user.dir=C:\Users\carbo\OneDrive - AUT University\COMP603\PDC-Movie-Booking-App\MovieBookingApplication
 os.name=Windows 10
 os.arch=amd64
 os.version=10.0
-derby.system.home=C:\Users\carbo\OneDrive - AUT University\COMP603\PDC-Movie-Booking-App\MovieBookingApplication
+derby.system.home=null
 Database Class Loader started - derby.database.classpath=''

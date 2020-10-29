@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * @author Carlo Carbonilla
  */
 
-public class MovieBookingModel {
+public class MovieBookingModel implements Runnable{
     private Connection conn;
     public String url = "jdbc:derby:MovieBookingAppDB;create=true";  //url of the DB host
     public String username = "carlocarbonilla";  //your DB username
@@ -28,7 +28,9 @@ public class MovieBookingModel {
         locations = new HashMap();
         movies = new HashMap();
         sessions = new HashMap();
-        
+    }
+    
+    public void run() {
         try {
             this.conn = DriverManager.getConnection(url, username, password);
             updateMovies();
@@ -40,7 +42,7 @@ public class MovieBookingModel {
         }
     }
     
-    private void updateMovies() {
+    private synchronized void updateMovies() {
         try {
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM MOVIES");
@@ -60,7 +62,7 @@ public class MovieBookingModel {
         }
     }
     
-    private void updateCinemas() {
+    private synchronized void updateCinemas() {
         try {
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM CINEMAS");
@@ -82,7 +84,7 @@ public class MovieBookingModel {
         }
     }
     
-    private void updateLocations() {
+    private synchronized void updateLocations() {
         try {
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM LOCATIONS");
@@ -101,11 +103,29 @@ public class MovieBookingModel {
         }
     }
     
-    public void addSession(int id, Session session) {
-        sessions.put(id, session);
+    public synchronized void addSession(Session session) {
+        sessions.put(sessionCounter, session);
+        
+        try {
+            Statement statement = conn.createStatement();
+            
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        sessionCounter++;
     }
     
-    public int getSessionCounter() {
-        return sessionCounter++ ;
+    public HashMap<Integer,Location> getLocations() {
+        return locations;
+    }
+    
+    public HashMap<Integer,Movie> getMovies(){
+        return movies;
+    }
+    
+    public HashMap<Integer,Session> getSessions() {
+        return sessions;
     }
 }
