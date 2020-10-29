@@ -1,5 +1,6 @@
 package com.carlo.pdc_b;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -7,10 +8,16 @@ import java.util.List;
  */
 
 public class MovieBookingModel {
-    private List<String> locations;
-    private List<String> dates;
+    private HashMap<Integer,Location> locations;
+    private HashMap<Integer,Movie> movies;
+    private HashMap<Integer,Session> sessions;
+    private static int sessionCounter;
     
-    private void getDates() {
+    public void addSession(int id, Movie movie) {
         
+    }
+    
+    public int getSessionCounter() {
+        return sessionCounter++ ;
     }
 }

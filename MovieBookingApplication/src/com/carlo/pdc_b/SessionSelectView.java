@@ -1,66 +1,40 @@
 package com.carlo.pdc_b;
 
-import java.awt.BorderLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JPanel;
 
 /**
  * @author Carlo Carbonilla
  */
 
-public class SessionSelectPanel extends JPanel {
-    private JLabel location;
+public class SessionSelectView extends SessionView {
     private JLabel date;
-    private JLabel movie;
     private JLabel sessions;
-    private JComboBox locationSelect;
     private JComboBox dateSelect;
-    private JComboBox movieSelect;
     private JList sessionSelect;
     private DefaultListModel<String> model;
     private JButton book;
     
-    public SessionSelectPanel() {
+    public SessionSelectView() {
         setLayout(null);
-        
-        location = new JLabel("Location: ");
-        location.setSize(300,20);
-        location.setLocation(10,10);
-        add(location);
         
         date = new JLabel("Date: ");
         date.setSize(300,20);
-        date.setLocation(10,40);
+        date.setLocation(10,70);
         add(date);
-        
-        movie = new JLabel("Movie: ");
-        movie.setSize(300,20);
-        movie.setLocation(10,70);
-        add(movie);
         
         sessions = new JLabel("Sessions");
         sessions.setSize(300,20);
         sessions.setLocation(10,105);
         add(sessions);
         
-        locationSelect = new JComboBox();
-        locationSelect.setSize(300,20);
-        locationSelect.setLocation(75,10);
-        add(locationSelect);
-        
         dateSelect = new JComboBox();
         dateSelect.setSize(300,20);
-        dateSelect.setLocation(75,40);
+        dateSelect.setLocation(75,70);
         add(dateSelect);
-        
-        movieSelect = new JComboBox();
-        movieSelect.setSize(300,20);
-        movieSelect.setLocation(75,70);
-        add(movieSelect);
         
         model = new DefaultListModel<>();
         sessionSelect = new JList();
