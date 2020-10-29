@@ -4,9 +4,9 @@ package com.carlo.pdc_b;
  * @author Carlo Carbonilla
  */
 
-public class SessionSelectRun {
+public class SessionBookRun {
     public static void main(String[] args) {
-        SessionSelectController frame = new SessionSelectController();
+        SessionBookController frame = new SessionBookController();
         frame.setVisible(true);
     }
 }

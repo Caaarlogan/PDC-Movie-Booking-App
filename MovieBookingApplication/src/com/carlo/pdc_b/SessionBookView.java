@@ -12,14 +12,14 @@ import javax.swing.ScrollPaneConstants;
  * @author Carlo Carbonilla
  */
 
-public class SessionSelectView extends SessionView {
+public class SessionBookView extends SessionView {
     private JLabel sessions;
     private JList sessionSelect;
     private DefaultListModel<String> sessionModel;
     private JScrollPane sessionScroll;
     private JButton book;
     
-    public SessionSelectView(MovieBookingModel model) {
+    public SessionBookView(MovieBookingModel model) {
         super(model);
         
         sessions = new JLabel("Sessions");

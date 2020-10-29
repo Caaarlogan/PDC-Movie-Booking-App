@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,7 +13,7 @@ import java.util.logging.Logger;
  * @author Carlo Carbonilla
  */
 
-public class MovieBookingModel implements Runnable{
+public class MovieBookingModel{
     private Connection conn;
     public String url = "jdbc:derby:MovieBookingAppDB;create=true";  //url of the DB host
     public String username = "carlocarbonilla";  //your DB username
@@ -23,14 +22,19 @@ public class MovieBookingModel implements Runnable{
     private HashMap<Integer,Movie> movies;
     private HashMap<Integer,Session> sessions;
     private static int sessionCounter;
+    public boolean updatedLocations;
+    public boolean updatedMovies;
+    public boolean updatedSessions;
     
     public MovieBookingModel() {
         locations = new HashMap();
         movies = new HashMap();
         sessions = new HashMap();
-    }
-    
-    public void run() {
+        
+        updatedLocations = false;
+        updatedMovies = false;
+        updatedSessions = false;
+        
         try {
             this.conn = DriverManager.getConnection(url, username, password);
             updateMovies();
@@ -41,6 +45,18 @@ public class MovieBookingModel implements Runnable{
             Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+//    public void run() {
+//        try {
+//            this.conn = DriverManager.getConnection(url, username, password);
+//            updateMovies();
+//            updateLocations();
+//            updateCinemas();
+//        }
+//        catch (SQLException ex) {
+//            Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
     
     private synchronized void updateMovies() {
         try {
@@ -56,6 +72,7 @@ public class MovieBookingModel implements Runnable{
                 Movie movie = new Movie(title, hourLength, minuteLength);
                 movies.put(id, movie);
             }
+            updatedMovies = true;
         }
         catch (SQLException ex) {
             Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -97,6 +114,7 @@ public class MovieBookingModel implements Runnable{
                 
                 locations.put(id, location);
             }
+            updatedLocations = true;
         }
         catch (SQLException ex) {
             Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);

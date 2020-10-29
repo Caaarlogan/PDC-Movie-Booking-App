@@ -27,4 +27,12 @@ public class Location
     {
         return name;
     }
+    
+    public HashMap<Integer, Cinema> getCinemas() {
+        return cinemas;
+    }
+    
+    public String toString() {
+        return name;
+    }
 }
