@@ -12,8 +12,8 @@ public class MovieBookingView extends JFrame {
         frame.setSize(500, 400);
 //        frame.setResizable(false);
 
-        SeatSelectPanel ssp = new SeatSelectPanel();
-        frame.add(ssp);
+        SessionCreatePanel scp = new SessionCreatePanel();
+        frame.add(scp);
 
         frame.setVisible(true);
     }
