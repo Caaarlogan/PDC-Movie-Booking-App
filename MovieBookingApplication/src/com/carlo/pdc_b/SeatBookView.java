@@ -57,8 +57,9 @@ public class SeatBookView extends JPanel {
                     button.setBackground(Color.WHITE);
                     
                     //If seat has been booked, disable button
-                    if(bookings[j][i-1]) {
+                    if(bookings[i-1][j]) {
                         button.setEnabled(false);
+                        button.setBackground(Color.RED);
                     }
                     
                     add(button);
@@ -71,7 +72,7 @@ public class SeatBookView extends JPanel {
         
         screen = new JLabel("SCREEN");
         screen.setSize(100, 20);
-        screen.setLocation(200, 40 + (height * 30));
+        screen.setLocation((width/2) * 30, 40 + (height * 30));
         add(screen);
         
         bookedSeats = new JLabel("Booked Seats: ");
@@ -108,5 +109,9 @@ public class SeatBookView extends JPanel {
     
     public List<String> getSelectedSeats() {
         return selectedSeats;
+    }
+    
+    public void clearSelectedSeats() {
+        selectedSeats.clear();
     }
 }

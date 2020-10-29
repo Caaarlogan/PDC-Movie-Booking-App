@@ -31,12 +31,12 @@ public class Session {
         this.timeFrom = timeFrom;
         this.timeTo = timeTo;
 
-        int x = cinema.getWidth();
-        int y = cinema.getHeight();
+        int x = cinema.getHeight();
+        int y = cinema.getWidth();
 
         this.bookings = new boolean[x][y];
 
-        for (int i = 0; i < y; i++)
+        for (int i = 0; i < x; i++)
         {
             for (int j = 0; j < y; j++)
             {

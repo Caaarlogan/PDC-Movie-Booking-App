@@ -45,6 +45,7 @@ public class SessionBookController extends SessionController {
     //Creates and transitions JFrame to seat GUI
     private void createSeatView() {
         if (!view.getSessionModel().isEmpty() && !view.getSessionSelect().isSelectionEmpty()) {
+            
             String[] sessionString = ((String) (view.getSessionSelect().getSelectedValue())).split(" "); //get toString of session and split by space
             String[] idString = sessionString[2].split(","); //separate session id from comma
             int sessionID = Integer.parseInt(idString[0]); //get session id
@@ -60,13 +61,16 @@ public class SessionBookController extends SessionController {
             //If book button is pushed
             seatView.getBook().addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent actionEvent) {
-                    String message = model.bookSeat();
+                    String bookedSeats = seatView.getBookedSeats().getText();
+                    iterateBookings(sessionID, bookedSeats);
+                    
                     remove(seatView);
                     add(view);
                     
                     revalidate();
                     repaint();
-                    view.getError().setText(message);
+                    view.getError().setText(bookedSeats);
+                    seatView.clearSelectedSeats();
                 }
             });
             
@@ -118,6 +122,19 @@ public class SessionBookController extends SessionController {
         }
         else { //if nothing selected
             view.getError().setText("Nothing is selected");
+        }
+    }
+    
+    //Iterate through string of seats and book each one to according session ID
+    public void iterateBookings(int sessionID, String bookedSeats) {
+        String[] seats = bookedSeats.split(" ");
+        
+        for(int i=2; i<seats.length; i++) {
+            char row = seats[i].charAt(0);
+            String columnNum = seats[i].substring(1);
+            int column = Integer.parseInt(columnNum);
+            
+            model.bookSeat(sessionID, row, column);
         }
     }
 }

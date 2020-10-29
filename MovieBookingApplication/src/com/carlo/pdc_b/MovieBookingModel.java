@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 
 public class MovieBookingModel{
     private Connection conn;
-    public String url = "jdbc:derby://localhost:1527/MovieBookingAppDB;create=true";  //url of the DB host
+    public String url = "jdbc:derby:MovieBookingAppDB;create=true";  //url of the DB host
     public String username = "carlocarbonilla";  //your DB username
     public String password = "18025686";   //your DB password
     private HashMap<Integer,Location> locations;
@@ -137,7 +137,7 @@ public class MovieBookingModel{
                 Session session = new Session(id, location, date, movie, cinema, timeFrom, timeTo);
                 sessions.put(id, session);
                 
-                sessionCounter = id++;
+                sessionCounter++;
             }
         }
         catch (SQLException ex) {
@@ -222,9 +222,9 @@ public class MovieBookingModel{
                 int row = letter - 'A'; //Convert char to int
                 
                 Session session = sessions.get(sessionID);
-                session.book(row, column);
+                session.book(row, column-1);
                 
-                bookingCounter = id++;
+                bookingCounter++;
             }
         }
         catch (SQLException ex) {
@@ -232,8 +232,30 @@ public class MovieBookingModel{
         }
     }
     
-    public String bookSeat() {
+    //Book seat with given session ID, row, and column
+    public void bookSeat(int sessionID, char row, int column) {
+        Session session = sessions.get(sessionID);
+        session.book(row-65, column-1);
         
+        try {
+            Statement statement = conn.createStatement();
+            
+            String query = "INSERT INTO BOOKINGS VALUES (?,?,?,?)";
+            
+            PreparedStatement ps = conn.prepareStatement(query);
+            
+            ps.setString(1,bookingCounter + "");
+            ps.setString(2,sessionID + "");
+            ps.setString(3,row + "");
+            ps.setString(4,column + "");
+            
+            ps.executeUpdate();
+            
+            bookingCounter++;
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public HashMap<Integer,Location> getLocations() {
