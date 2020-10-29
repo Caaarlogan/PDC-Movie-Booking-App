@@ -137,7 +137,7 @@ public class SessionCreateView extends SessionView{
         
         //Check if string only contains numbers
         if(minutes.matches("[0-9]+")) {
-             int minute = Integer.parseInt(minutes);
+            int minute = Integer.parseInt(minutes);
             
             if(minute >= 0 && minute <= 59) {
                 return minute;
@@ -169,7 +169,17 @@ public class SessionCreateView extends SessionView{
         Location location = getSelectedLocation();
         
         HashMap<Integer, Cinema> cinemaMap = location.getCinemas();
-        return cinemaMap.get(i+1);
+        Set<Integer> keys = cinemaMap.keySet();
+        
+        for(int key : keys) {
+            Cinema cinema = cinemaMap.get(key);
+            
+            if(cinema.getNum()==i+1) {
+                return cinema;
+            }
+        }
+        
+        return null;
     }
     
     public JLabel getError() {

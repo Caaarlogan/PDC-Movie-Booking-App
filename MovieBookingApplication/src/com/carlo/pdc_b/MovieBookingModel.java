@@ -3,6 +3,7 @@ package com.carlo.pdc_b;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -37,7 +38,7 @@ public class MovieBookingModel{
         sessions = new HashMap();
         
         dateFormat = DateTimeFormatter.ofPattern("uuuu-MM-dd");
-        timeFormat = DateTimeFormatter.ofPattern("H:m");
+        timeFormat = DateTimeFormatter.ofPattern("HH:mm");
         
         try {
             this.conn = DriverManager.getConnection(url, username, password);
@@ -124,7 +125,7 @@ public class MovieBookingModel{
                 int locationID = rs.getInt("SESSION_LOCATION");
                 LocalDate date = rs.getDate("SESSION_DATE").toLocalDate();
                 int movieID = rs.getInt("SESSION_MOVIE");
-                int cinemaID = rs.getInt("SESSION_ICINEMA");
+                int cinemaID = rs.getInt("SESSION_CINEMA");
                 LocalTime timeFrom = rs.getTime("SESSION_TIME_FROM").toLocalTime();
                 LocalTime timeTo = rs.getTime("SESSION_TIME_TO").toLocalTime();
                 
@@ -151,11 +152,25 @@ public class MovieBookingModel{
         try {
             Statement statement = conn.createStatement();
             
-            statement.executeUpdate("INSERT INTO SESSIONS VALUES ("
-                    + sessionCounter + ", " + location.getID() + ", '"
-                    + date.format(dateFormat) + "', " + movie.getID() + ", "
-                    + cinema.getID() + ", '" + timeFrom.format(timeFormat) + "', '"
-                    + timeTo.format(timeFormat) + "')");
+            String query = "INSERT INTO SESSIONS VALUES (?,?,?,?,?,?,?)";
+            
+            PreparedStatement ps = conn.prepareStatement(query);
+            
+            ps.setString(1,sessionCounter + "");
+            ps.setString(2,location.getID() + "");
+            ps.setString(3,date.format(dateFormat));
+            ps.setString(4,movie.getID() + "");
+            ps.setString(5,cinema.getID() + "");
+            ps.setString(6,timeFrom.format(timeFormat));
+            ps.setString(7,timeTo.format(timeFormat));
+            
+            ps.executeUpdate();
+            
+//            statement.executeUpdate("INSERT INTO SESSIONS VALUES ("
+//                    + sessionCounter + ", " + location.getID() + ", '"
+//                    + date.format(dateFormat) + "', " + movie.getID() + ", "
+//                    + cinema.getID() + ", '" + timeFrom.format(timeFormat) + "', '"
+//                    + timeTo.format(timeFormat) + "')");
         }
         catch (SQLException ex) {
             Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
