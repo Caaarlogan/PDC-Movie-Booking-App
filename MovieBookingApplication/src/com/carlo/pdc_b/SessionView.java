@@ -20,10 +20,11 @@ public class SessionView extends JPanel{
     protected JLabel date;
     protected JComboBox locationSelect;
     protected JComboBox movieSelect;
-    protected JTextField dateSelect;
+    protected JComboBox dateSelect;
     protected MovieBookingModel model; //The model to which this view is attached
     protected String[] locations;
     protected String[] movies;
+    protected String[] dates;
     protected DateTimeFormatter dateFormat; //format date is printed in
     
     public SessionView(MovieBookingModel model) {
@@ -33,6 +34,7 @@ public class SessionView extends JPanel{
         
         this.model = model;
         
+        updateDates();
         updateLocations();
         updateMovies();
         
@@ -56,10 +58,7 @@ public class SessionView extends JPanel{
         locationSelect.setLocation(75,10);
         add(locationSelect);
         
-        LocalDate dateNow = LocalDate.now();
-        String date = dateNow.format(dateFormat);
-        
-        dateSelect = new JTextField(date);
+        dateSelect = new JComboBox(dates);
         dateSelect.setSize(300,20);
         dateSelect.setLocation(75,40);
         add(dateSelect);
@@ -68,6 +67,15 @@ public class SessionView extends JPanel{
         movieSelect.setSize(300,20);
         movieSelect.setLocation(75,70);
         add(movieSelect);
+    }
+    
+    protected void updateDates() {
+        dates = new String[7];
+        LocalDate dateNow = LocalDate.now();
+        
+        for(int i=0; i<7; i++) {
+            dates[i] = dateNow.plusDays(i).format(dateFormat);
+        }
     }
     
     protected void updateLocations() {
@@ -98,5 +106,9 @@ public class SessionView extends JPanel{
             movies[i] = movieMap.get(id).getTitle();
             i++;
         }
+    }
+    
+    public JComboBox getLocationSelect() {
+        return locationSelect;
     }
 }

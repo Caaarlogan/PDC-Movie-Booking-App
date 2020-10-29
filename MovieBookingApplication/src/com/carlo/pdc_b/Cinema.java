@@ -6,16 +6,22 @@ package com.carlo.pdc_b;
  */
 public class Cinema
 {
+    private int id;
     private int cinemaNum; //cinema number
     private int[] size; //dimensions of cinema seats
 
-    public Cinema(int cinemaNum, int width, int height)
+    public Cinema(int id, int cinemaNum, int width, int height)
     {
+        this.id = id;
         this.cinemaNum = cinemaNum;
         
         //width and height of cinema
         int[] input = {width, height};
         size = input;
+    }
+    
+    public int getID() {
+        return id;
     }
     
     public int[] getSize()

@@ -10,17 +10,23 @@ import java.util.HashMap;
 
 public class Location
 {
+    private int id;
     private String name; //name of location
     private HashMap<Integer, Cinema> cinemas; //id key, cinema value
     
-    public Location(String name)
+    public Location(int id, String name)
     {
+        this.id = id;
         this.name = name;
         this.cinemas = new HashMap();
     }
     
     public void addCinema(int id, Cinema cinema) {
         cinemas.put(id, cinema);
+    }
+    
+    public int getID() {
+        return id;
     }
     
     public String getName()

@@ -27,8 +27,8 @@ public class Session {
         this.timeFrom = timeFrom;
         this.timeTo = timeTo;
 
-        int numSides = cinema.getSize()[1];
-        int sideWidth = cinema.getSize()[2];
+        int numSides = cinema.getSize()[0];
+        int sideWidth = cinema.getSize()[1];
         int x = numSides * sideWidth; //total width of seats of cinema
 
         int y = cinema.getSize()[0]; //height of seats of cinema

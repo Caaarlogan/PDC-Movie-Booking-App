@@ -8,11 +8,11 @@ import javax.swing.JPanel;
 /**
  * @author Carlo Carbonilla
  */
-public class SeatSelectPanel extends JPanel {
+public class SeatBookView extends JPanel {
     private JLabel bookedSeats;
     private JButton book;
     
-    public SeatSelectPanel() {
+    public SeatBookView() {
         setLayout(null);
         
         int height = 10;
