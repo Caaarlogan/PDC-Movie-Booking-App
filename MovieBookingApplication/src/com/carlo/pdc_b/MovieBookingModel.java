@@ -232,7 +232,7 @@ public class MovieBookingModel{
         }
     }
     
-    public void bookSeat() {
+    public String bookSeat() {
         
     }
     

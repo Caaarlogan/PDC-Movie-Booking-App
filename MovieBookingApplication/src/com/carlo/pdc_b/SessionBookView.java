@@ -17,7 +17,7 @@ public class SessionBookView extends SessionView {
     private JList sessionSelect;
     private DefaultListModel<String> sessionModel;
     private JScrollPane sessionScroll;
-    private JButton book;
+    private JButton seats;
 
     public SessionBookView(MovieBookingModel model) {
         super(model);
@@ -39,10 +39,10 @@ public class SessionBookView extends SessionView {
         
         updateSessions();
         
-        book = new JButton("Book");
-        book.setSize(75, 25);
-        book.setLocation(10, 290);
-        add(book);
+        seats = new JButton("Seats");
+        seats.setSize(75, 25);
+        seats.setLocation(10, 290);
+        add(seats);
     }
 
     public DefaultListModel<String> getSessionModel() {
@@ -53,8 +53,8 @@ public class SessionBookView extends SessionView {
         return sessionSelect;
     }
     
-    public JButton getBook() {
-        return book;
+    public JButton getSeatsButton() {
+        return seats;
     }
     
     public void updateSessions() {
