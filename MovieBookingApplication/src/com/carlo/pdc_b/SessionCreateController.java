@@ -51,7 +51,7 @@ public class SessionCreateController extends SessionController {
             
             //check if time is in the past
             if(selectedDate.equals(LocalDate.now()) && selectedTime.compareTo(timeNow) < 0) {
-                return "Time can't be in the past";
+                return "Session can't be in the past";
             }
             else {
                 Movie selectedMovie = view.getSelectedMovie();
@@ -64,7 +64,6 @@ public class SessionCreateController extends SessionController {
                 else {
                     Location selectedLocation = view.getSelectedLocation();
                     Cinema selectedCinema = view.getSelectedCinema();
-                    Session session = new Session(selectedLocation, selectedDate, selectedMovie, selectedCinema, selectedTime, timeTo);
                     model.addSession(selectedLocation, selectedDate, selectedMovie, selectedCinema, selectedTime, timeTo);
                     
                     return "Session created successfully";

@@ -8,25 +8,29 @@ public class Cinema
 {
     private int id;
     private int cinemaNum; //cinema number
-    private int[] size; //dimensions of cinema seats
+    private int width; //dimensions of cinema seats
+    private int height;
 
     public Cinema(int id, int cinemaNum, int width, int height)
     {
         this.id = id;
         this.cinemaNum = cinemaNum;
-        
-        //width and height of cinema
-        int[] input = {width, height};
-        size = input;
+        this.width = width;
+        this.height = height;
     }
     
     public int getID() {
         return id;
     }
     
-    public int[] getSize()
+    public int getWidth()
     {
-        return size;
+        return width;
+    }
+    
+    public int getHeight()
+    {
+        return height;
     }
     
     public int getNum()

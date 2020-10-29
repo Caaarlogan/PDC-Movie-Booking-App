@@ -18,6 +18,7 @@ public class SessionView extends JPanel{
     protected JLabel location;
     protected JLabel movie;
     protected JLabel date;
+    protected JLabel error;
     protected JComboBox locationSelect;
     protected JComboBox movieSelect;
     protected JComboBox dateSelect;
@@ -67,6 +68,11 @@ public class SessionView extends JPanel{
         movieSelect.setSize(300,20);
         movieSelect.setLocation(75,70);
         add(movieSelect);
+        
+        error = new JLabel("");
+        error.setSize(500,50);
+        error.setLocation(10,320);
+        add(error);
     }
     
     protected void updateDates() {
@@ -110,5 +116,34 @@ public class SessionView extends JPanel{
     
     public JComboBox getLocationSelect() {
         return locationSelect;
+    }
+    
+    public JComboBox getDateSelect() {
+        return dateSelect;
+    }
+    
+    public JComboBox getMovieSelect() {
+        return movieSelect;
+    }
+    
+    public Location getSelectedLocation() {
+        int i = locationSelect.getSelectedIndex();
+        HashMap<Integer,Location> locationMap = model.getLocations();
+        return locationMap.get(i+1);
+    }
+    
+    public Movie getSelectedMovie() {
+        int i = movieSelect.getSelectedIndex();
+        HashMap<Integer,Movie> movieMap = model.getMovies();
+        return movieMap.get(i+1);
+    }
+    
+    public LocalDate getSelectedDate() {
+        int i = dateSelect.getSelectedIndex();
+        return LocalDate.now().plusDays(i);
+    }
+    
+    public JLabel getError() {
+        return error;
     }
 }

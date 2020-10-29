@@ -16,11 +16,9 @@ import javax.swing.JTextField;
 
 public class SessionCreateView extends SessionView{
     private JLabel cinema;
-    private JLabel date;
     private JLabel timeHours;
     private JLabel timeMinutes;
     private JLabel dateTimeHelp;
-    private JLabel error;
     private JComboBox cinemaSelect;
     private JTextField timeHoursSelect;
     private JTextField timeMinutesSelect;
@@ -82,10 +80,7 @@ public class SessionCreateView extends SessionView{
         dateTimeHelp.setLocation(10,210);
         add(dateTimeHelp);
         
-        error = new JLabel("");
-        error.setSize(350,50);
-        error.setLocation(10,240);
-        add(error);
+        
         
         constructorFinished = true;
     }
@@ -147,23 +142,6 @@ public class SessionCreateView extends SessionView{
         return -1; //return -1 if invalid minute input
     }
     
-    public LocalDate getSelectedDate() {
-        int i = dateSelect.getSelectedIndex();
-        return LocalDate.now().plusDays(i);
-    }
-    
-    public Location getSelectedLocation() {
-        int i = locationSelect.getSelectedIndex();
-        HashMap<Integer,Location> locationMap = model.getLocations();
-        return locationMap.get(i+1);
-    }
-    
-    public Movie getSelectedMovie() {
-        int i = movieSelect.getSelectedIndex();
-        HashMap<Integer,Movie> movieMap = model.getMovies();
-        return movieMap.get(i+1);
-    }
-    
     public Cinema getSelectedCinema() {
         int i = cinemaSelect.getSelectedIndex();
         Location location = getSelectedLocation();
@@ -182,7 +160,5 @@ public class SessionCreateView extends SessionView{
         return null;
     }
     
-    public JLabel getError() {
-        return error;
-    }
+    
 }

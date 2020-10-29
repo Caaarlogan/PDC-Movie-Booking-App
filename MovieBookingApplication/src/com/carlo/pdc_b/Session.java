@@ -2,6 +2,7 @@ package com.carlo.pdc_b;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -9,6 +10,7 @@ import java.util.List;
  */
 
 public class Session {
+    private int id;
     private Location location; //location of session
     private LocalDate date; //date of session
     private Movie movie; //movie session is playing
@@ -17,9 +19,11 @@ public class Session {
     private LocalTime timeTo; //end time of session
     private boolean[][] bookings; //2d array of seat bookings of session
     private int freeSeats; //number of free seats in session
+    private DateTimeFormatter timeFormat;
 
-    public Session(Location location, LocalDate date, Movie movie, Cinema cinema, LocalTime timeFrom, LocalTime timeTo)
+    public Session(int id, Location location, LocalDate date, Movie movie, Cinema cinema, LocalTime timeFrom, LocalTime timeTo)
     {
+        this.id = id;
         this.location = location;
         this.date = date;
         this.movie = movie;
@@ -27,11 +31,8 @@ public class Session {
         this.timeFrom = timeFrom;
         this.timeTo = timeTo;
 
-        int numSides = cinema.getSize()[0];
-        int sideWidth = cinema.getSize()[1];
-        int x = numSides * sideWidth; //total width of seats of cinema
-
-        int y = cinema.getSize()[0]; //height of seats of cinema
+        int x = cinema.getWidth();
+        int y = cinema.getHeight();
 
         this.bookings = new boolean[x][y];
 
@@ -44,6 +45,8 @@ public class Session {
         }
         
         freeSeats = x*y;
+        
+        timeFormat = DateTimeFormatter.ofPattern("HH:mm");
     }
     
     //book a seat for this session
@@ -86,5 +89,15 @@ public class Session {
     public int getFreeSeats()
     {
         return freeSeats;
+    }
+    
+    public boolean[][] getBookings() {
+        return bookings;
+    }
+    
+    public String toString() {
+        return "Session ID: " + id + ", Cinema: " + cinema.getNum() +
+               ", Time: " + timeFrom.format(timeFormat) + " - " +
+               timeTo.format(timeFormat);
     }
 }

@@ -1,18 +1,17 @@
 package com.carlo.pdc_b;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,7 +27,8 @@ public class MovieBookingModel{
     private HashMap<Integer,Location> locations;
     private HashMap<Integer,Movie> movies;
     private HashMap<Integer,Session> sessions;
-    private static int sessionCounter;
+    private static int sessionCounter; //gets the latest session ID
+    private static int bookingCounter; //gets the latest booking ID
     private DateTimeFormatter dateFormat;
     private DateTimeFormatter timeFormat;
     
@@ -46,6 +46,7 @@ public class MovieBookingModel{
             updateLocations();
             updateCinemas();
             updateSessions();
+            updateBookings();
         }
         catch (SQLException ex) {
             Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -133,10 +134,10 @@ public class MovieBookingModel{
                 Movie movie = movies.get(movieID);
                 Cinema cinema = location.getCinemas().get(cinemaID);
                 
-                Session session = new Session(location, date, movie, cinema, timeFrom, timeTo);
+                Session session = new Session(id, location, date, movie, cinema, timeFrom, timeTo);
                 sessions.put(id, session);
                 
-                sessionCounter++;
+                sessionCounter = id++;
             }
         }
         catch (SQLException ex) {
@@ -144,9 +145,40 @@ public class MovieBookingModel{
         }
     }
     
+    //Get sessions with specified location, date, and movie
+    public synchronized List<Session> getSessionsResults(Location location, LocalDate date, Movie movie) {
+        List<Session> sessionResults = new ArrayList();
+        
+        try {
+            Statement statement = conn.createStatement();
+            
+            String query = "SELECT SESSION_ID FROM SESSIONS WHERE\n" + 
+                           "SESSION_LOCATION=? AND SESSION_DATE=? AND SESSION_MOVIE=?";
+            
+            PreparedStatement ps = conn.prepareStatement(query);
+            
+            ps.setString(1,location.getID() + "");
+            ps.setString(2,date.format(dateFormat));
+            ps.setString(3,movie.getID() + "");
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                int id = rs.getInt("SESSION_ID");
+                Session session = sessions.get(id);
+                sessionResults.add(session);
+            }
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return sessionResults;
+    }
+    
     public synchronized void addSession(Location location, LocalDate date, Movie movie, Cinema cinema, LocalTime timeFrom, LocalTime timeTo) {
         
-        Session session = new Session(location, date, movie, cinema, timeFrom, timeTo);
+        Session session = new Session(sessionCounter, location, date, movie, cinema, timeFrom, timeTo);
         sessions.put(sessionCounter, session);
         
         try {
@@ -165,18 +197,43 @@ public class MovieBookingModel{
             ps.setString(7,timeTo.format(timeFormat));
             
             ps.executeUpdate();
-            
-//            statement.executeUpdate("INSERT INTO SESSIONS VALUES ("
-//                    + sessionCounter + ", " + location.getID() + ", '"
-//                    + date.format(dateFormat) + "', " + movie.getID() + ", "
-//                    + cinema.getID() + ", '" + timeFrom.format(timeFormat) + "', '"
-//                    + timeTo.format(timeFormat) + "')");
         }
         catch (SQLException ex) {
             Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         sessionCounter++;
+    }
+    
+    public void updateBookings() {
+        bookingCounter = 1;
+        
+        try {
+            Statement statement = conn.createStatement();
+            
+            ResultSet rs = statement.executeQuery("SELECT * FROM BOOKINGS");
+            
+            while(rs.next()) {
+                int id = rs.getInt("BOOKING_ID");
+                int sessionID = rs.getInt("BOOKING_SESSION");
+                int column = rs.getInt("BOOKING_COLUMN");
+                String string = rs.getString("BOOKING_ROW");
+                char letter = string.charAt(0); //Convert string to char
+                int row = letter - 'A'; //Convert char to int
+                
+                Session session = sessions.get(sessionID);
+                session.book(row, column);
+                
+                bookingCounter = id++;
+            }
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void bookSeat() {
+        
     }
     
     public HashMap<Integer,Location> getLocations() {
