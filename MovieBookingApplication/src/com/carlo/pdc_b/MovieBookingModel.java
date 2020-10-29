@@ -1,20 +1,108 @@
 package com.carlo.pdc_b;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Carlo Carbonilla
  */
 
 public class MovieBookingModel {
+    private Connection conn;
+    public String url = "jdbc:derby:MovieBookingAppDB;create=true";  //url of the DB host
+    public String username = "carlocarbonilla";  //your DB username
+    public String password = "18025686";   //your DB password
     private HashMap<Integer,Location> locations;
     private HashMap<Integer,Movie> movies;
     private HashMap<Integer,Session> sessions;
     private static int sessionCounter;
     
-    public void addSession(int id, Movie movie) {
+    public MovieBookingModel() {
+        locations = new HashMap();
+        movies = new HashMap();
+        sessions = new HashMap();
         
+        try {
+            this.conn = DriverManager.getConnection(url, username, password);
+            updateMovies();
+            updateLocations();
+            updateCinemas();
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void updateMovies() {
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM MOVIES");
+            
+            while(rs.next()) {
+                int id = rs.getInt("MOVIE_ID");
+                String title = rs.getString("MOVIE_TITLE");
+                int hourLength = rs.getInt("MOVIE_HOUR_LENGTH");
+                int minuteLength = rs.getInt("MOVIE_MINUTE_LENGTH");
+                
+                Movie movie = new Movie(title, hourLength, minuteLength);
+                movies.put(id, movie);
+            }
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void updateCinemas() {
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM CINEMAS");
+            
+            while(rs.next()) {
+                int id = rs.getInt("CINEMA_ID");
+                int num = rs.getInt("CINEMA_NUM");
+                int locationID = rs.getInt("CINEMA_LOCATION");
+                int height = rs.getInt("CINEMA_HEIGHT");
+                int width = rs.getInt("CINEMA_WIDTH");
+                
+                Cinema cinema = new Cinema(num, width, height);
+                Location location = locations.get(locationID);
+                location.addCinema(id, cinema);
+            }
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void updateLocations() {
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM LOCATIONS");
+            
+            while(rs.next()) {
+                int id = rs.getInt("LOCATION_ID");
+                String name = rs.getString("LOCATION_NAME");
+                
+                Location location = new Location(name);
+                
+                locations.put(id, location);
+            }
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void addSession(int id, Session session) {
+        sessions.put(id, session);
     }
     
     public int getSessionCounter() {
