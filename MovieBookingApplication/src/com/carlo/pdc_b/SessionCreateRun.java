@@ -1,7 +1,5 @@
 package com.carlo.pdc_b;
 
-import javax.swing.JFrame;
-
 /**
  * @author Carlo Carbonilla
  */

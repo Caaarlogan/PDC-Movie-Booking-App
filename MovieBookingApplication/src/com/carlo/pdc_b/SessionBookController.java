@@ -12,7 +12,7 @@ import javax.swing.JButton;
 /**
  * @author Carlo Carbonilla
  */
-public class SessionBookController extends SessionController {
+public class SessionBookController extends SessionController{
 
     private SessionBookView view; //View that shows available sessions
     private SeatBookView seatView; //View that shows seat of sessions
@@ -20,8 +20,9 @@ public class SessionBookController extends SessionController {
 
     public SessionBookController() {
         super();
+        
         view = new SessionBookView(model);
-
+        
         comboListener = new ItemListener() {
             public void itemStateChanged(ItemEvent itemEvent) {
                 view.updateSessions();
@@ -32,7 +33,7 @@ public class SessionBookController extends SessionController {
         view.getDateSelect().addItemListener(comboListener);
         view.getMovieSelect().addItemListener(comboListener);
 
-        //If book button is pushed
+        //If sets button is pushed
         view.getSeatsButton().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
                 createSeatView();
@@ -40,24 +41,24 @@ public class SessionBookController extends SessionController {
         });
 
         add(view);
+        
+        model.addObserver(view);
     }
-
+    
     //Creates and transitions JFrame to seat GUI
     private void createSeatView() {
         if (!view.getSessionModel().isEmpty() && !view.getSessionSelect().isSelectionEmpty()) {
             
             String[] sessionString = ((String) (view.getSessionSelect().getSelectedValue())).split(" "); //get toString of session and split by space
             String[] idString = sessionString[2].split(","); //separate session id from comma
+            
             int sessionID = Integer.parseInt(idString[0]); //get session id
 
             Session session = model.getSessions().get(sessionID);
             Cinema cinema = session.getCinema();
-            seatView = new SeatBookView(cinema.getWidth(), cinema.getHeight(), session.getBookings());
-            remove(view);
-            add(seatView);
-            revalidate();
-            repaint();
-
+            
+            seatView = new SeatBookView(model, sessionID);
+            
             //If book button is pushed
             seatView.getBook().addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent actionEvent) {
@@ -123,6 +124,13 @@ public class SessionBookController extends SessionController {
         else { //if nothing selected
             view.getError().setText("Nothing is selected");
         }
+        
+        remove(view);
+        add(seatView);
+        revalidate();
+        repaint();
+        
+        model.addObserver(seatView);
     }
     
     //Iterate through string of seats and book each one to according session ID

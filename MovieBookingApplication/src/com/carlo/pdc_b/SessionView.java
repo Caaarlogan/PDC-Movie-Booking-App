@@ -3,18 +3,19 @@ package com.carlo.pdc_b;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 /**
  * Template GUI that's both used for session creation and selection
  * @author Carlo Carbonilla
  */
 
-public class SessionView extends JPanel{
+public class SessionView extends JPanel implements Observer{
     protected JLabel location;
     protected JLabel movie;
     protected JLabel date;
@@ -73,6 +74,11 @@ public class SessionView extends JPanel{
         error.setSize(500,50);
         error.setLocation(10,320);
         add(error);
+    }
+    
+    //Hook method
+    public void update(Observable model, Object arg) {
+        
     }
     
     protected void updateDates() {

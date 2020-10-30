@@ -1,6 +1,7 @@
 package com.carlo.pdc_b;
 
 import java.time.LocalDate;
+import java.util.Observable;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -36,34 +37,38 @@ public class SessionBookView extends SessionView {
         sessionScroll.setSize(460, 150);
         sessionScroll.setLocation(10, 130);
         add(sessionScroll);
-        
+
         updateSessions();
-        
+
         seats = new JButton("Seats");
         seats.setSize(75, 25);
         seats.setLocation(10, 290);
         add(seats);
     }
 
+    public void update(Observable model, Object args) {
+        updateSessions();
+    }
+
     public DefaultListModel<String> getSessionModel() {
         return sessionModel;
     }
-    
+
     public JList getSessionSelect() {
         return sessionSelect;
     }
-    
+
     public JButton getSeatsButton() {
         return seats;
     }
-    
+
     public void updateSessions() {
         Location location = getSelectedLocation();
         Movie movie = getSelectedMovie();
         LocalDate date = getSelectedDate();
-        
+
         sessionModel.removeAllElements();
-        
+
         for (Session session : model.getSessionsResults(location, date, movie)) {
             sessionModel.addElement(session.toString());
         }

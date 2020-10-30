@@ -4,6 +4,10 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -11,26 +15,74 @@ import javax.swing.JPanel;
 /**
  * @author Carlo Carbonilla
  */
-public class SeatBookView extends JPanel {
-    
+public class SeatBookView extends JPanel implements Observer {
+
     private JLabel screen;
     private JLabel bookedSeats;
     private JButton book;
     private JButton back;
-    private HashMap<String,JButton> seatButtons; //int seat code key, button value
+    private HashMap<String, JButton> seatButtons; //int seat code key, button value
     private List<String> selectedSeats;
+    private int width;
+    private int height;
+    private MovieBookingModel model;
+    private int sessionID;
 
-    public SeatBookView(int width, int height, boolean[][] bookings) {
+    public SeatBookView(MovieBookingModel model, int sessionID) {
         setLayout(null);
 
+        this.model = model;
+        this.sessionID = sessionID;
+        Session session = model.getSessions().get(sessionID);
+        
+        
         seatButtons = new HashMap();
         selectedSeats = new ArrayList();
+
+        width = session.getCinema().getWidth();
+        height = session.getCinema().getHeight();
+
         
+
+        screen = new JLabel("SCREEN");
+        screen.setSize(100, 20);
+        screen.setLocation((width / 2) * 30, 40 + (height * 30));
+        add(screen);
+
+        bookedSeats = new JLabel("Booked Seats: ");
+        bookedSeats.setSize(500, 20);
+        bookedSeats.setLocation(10, 70 + (height * 30));
+        add(bookedSeats);
+
+        book = new JButton("Book");
+        book.setSize(75, 20);
+        book.setLocation(10, 100 + (height * 30));
+        add(book);
+
+        back = new JButton("Back");
+        back.setSize(75, 20);
+        back.setLocation(95, 100 + (height * 30));
+        add(back);
+        
+        updateSeats();
+    }
+
+    public void update(Observable model, Object arg) {
+        updateSeats();
+    }
+
+    private void updateSeats() {
+        
+        Session session = model.getSessions().get(sessionID);
+        
+        boolean[][] bookings = session.getBookings();
+
         //Iterate through rows of cinema
         for (int i = 0; i <= height; i++) {
             int y = 0;
             char row = (char) (64 + i);
             
+            //If at the first column, print out row letters
             if (i != 0) {
                 y = 10 + (i * 30);
                 JLabel letter = new JLabel("" + row);
@@ -38,11 +90,12 @@ public class SeatBookView extends JPanel {
                 letter.setLocation(10, y);
                 add(letter);
             }
-            
+
             //Iterate through columns of cinema
             for (int j = 0; j < width; j++) {
                 int x = 30 + (j * 30);
-
+                
+                //If at the first row, print out column numbers
                 if (i == 0) {
                     JLabel columnNum = new JLabel("" + (j + 1));
                     columnNum.setSize(100, 20);
@@ -55,62 +108,48 @@ public class SeatBookView extends JPanel {
                     button.setSize(20, 20);
                     button.setLocation(x, y);
                     button.setBackground(Color.WHITE);
-                    
+
                     //If seat has been booked, disable button
-                    if(bookings[i-1][j]) {
+                    if (bookings[i - 1][j]) {
                         button.setEnabled(false);
                         button.setBackground(Color.RED);
                     }
-                    
+
                     add(button);
-                    
+
                     String seat = "" + row + seatNum; //seat code (row and column)
                     seatButtons.put(seat, button); //store button in hash map
                 }
             }
         }
-        
-        screen = new JLabel("SCREEN");
-        screen.setSize(100, 20);
-        screen.setLocation((width/2) * 30, 40 + (height * 30));
-        add(screen);
-        
-        bookedSeats = new JLabel("Booked Seats: ");
-        bookedSeats.setSize(500, 20);
-        bookedSeats.setLocation(10, 70 + (height * 30));
-        add(bookedSeats);
 
-        book = new JButton("Book");
-        book.setSize(75, 20);
-        book.setLocation(10, 100 + (height * 30));
-        add(book);
-        
-        back = new JButton("Back");
-        back.setSize(75, 20);
-        back.setLocation(95, 100 + (height * 30));
-        add(back);
+        selectedSeats = new ArrayList();
+        bookedSeats.setText("Booked Seats: ");
+
+        revalidate();
+        repaint();
     }
-    
+
     public JButton getBook() {
         return book;
     }
-    
+
     public JButton getBack() {
         return back;
     }
-    
-    public HashMap<String,JButton> getSeatButtons() {
+
+    public HashMap<String, JButton> getSeatButtons() {
         return seatButtons;
     }
-    
+
     public JLabel getBookedSeats() {
         return bookedSeats;
     }
-    
+
     public List<String> getSelectedSeats() {
         return selectedSeats;
     }
-    
+
     public void clearSelectedSeats() {
         selectedSeats.clear();
     }

@@ -1,9 +1,9 @@
 package com.carlo.pdc_b;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.Observable;
 import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,7 +26,10 @@ public class SessionCreateView extends SessionView{
     protected boolean constructorFinished;
     protected DateTimeFormatter timeFormat; //format time is printed in
     
-    //Initialize components
+    /**
+     * Initialize components
+     * @param model 
+     */
     public SessionCreateView(MovieBookingModel model) {
         super(model);
         
@@ -83,6 +86,15 @@ public class SessionCreateView extends SessionView{
         
         
         constructorFinished = true;
+    }
+    
+    /**
+     * Nothing to update as it's updated in the model class
+     * @param model
+     * @param arg 
+     */
+    public void update(Observable model, Object arg) {
+        
     }
     
     //Updates cinemas when location is changed
