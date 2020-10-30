@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 
 public class MovieBookingModel{
     private Connection conn;
-    public String url = "jdbc:derby:MovieBookingAppDB;create=true";  //url of the DB host
+    public String url = "jdbc:derby://localhost:1527/MovieBookingAppDB;create=true";  //url of the DB host
     public String username = "carlocarbonilla";  //your DB username
     public String password = "18025686";   //your DB password
     private HashMap<Integer,Location> locations;
@@ -256,6 +256,44 @@ public class MovieBookingModel{
         catch (SQLException ex) {
             Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    //Check if sessions overlap each other
+    public boolean checkOverlap(Location location, LocalDate date, Cinema cinema, LocalTime start1, LocalTime end1) {
+        boolean overlap = false;
+        
+        try {
+            Statement statement = conn.createStatement();
+            
+            String query = "SELECT SESSION_ID FROM SESSIONS WHERE\n" + 
+                           "SESSION_LOCATION=? AND SESSION_DATE=? AND SESSION_CINEMA=?";
+            
+            PreparedStatement ps = conn.prepareStatement(query);
+            
+            ps.setString(1,location.getID() + "");
+            ps.setString(2,date.format(dateFormat));
+            ps.setString(3,cinema.getID() + "");
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()) {
+                int id = rs.getInt("SESSION_ID");
+                Session result = sessions.get(id);
+                
+                LocalTime start2 = result.getTimeFrom();
+                LocalTime end2 = result.getTimeTo();
+                
+                //Check for overlap or equal session times
+                if (!start1.isAfter(end2) && !start2.isAfter(end1)) {
+                    overlap = true;
+                }
+            }
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return overlap;
     }
     
     public HashMap<Integer,Location> getLocations() {

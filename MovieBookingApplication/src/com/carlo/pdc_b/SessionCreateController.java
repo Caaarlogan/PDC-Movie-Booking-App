@@ -37,6 +37,10 @@ public class SessionCreateController extends SessionController {
         add(view);
     }
     
+    /**
+     * Creates a session with selected inputs from view
+     * @return string message to be displayed
+     */
     private String createSession() {
         int hour = view.getSelectedHour();
         int minute = view.getSelectedMinute();
@@ -64,9 +68,16 @@ public class SessionCreateController extends SessionController {
                 else {
                     Location selectedLocation = view.getSelectedLocation();
                     Cinema selectedCinema = view.getSelectedCinema();
-                    model.addSession(selectedLocation, selectedDate, selectedMovie, selectedCinema, selectedTime, timeTo);
                     
-                    return "Session created successfully";
+                    boolean overlap = model.checkOverlap(selectedLocation, selectedDate, selectedCinema, selectedTime, timeTo);
+                    
+                    if(!overlap) {
+                        model.addSession(selectedLocation, selectedDate, selectedMovie, selectedCinema, selectedTime, timeTo);
+                        return "Session created successfully";
+                    }
+                    else {
+                        return "This session overlaps with another session";
+                    }
                 }
             }
         }
