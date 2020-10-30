@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 /**
+ * Controller class that modifies data model through session creating view 
+ * interactions
  * @author Carlo Carbonilla
  */
 public class SessionCreateController extends SessionController {
@@ -29,7 +31,7 @@ public class SessionCreateController extends SessionController {
         //When create session button is pushed, see if you can create the session
         view.getCreate().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
-                String response = createSession();
+                String response = createSession(view.getSelectedHour(), view.getSelectedMinute(), view.getSelectedDate());
                 view.getError().setText(response);
             }
         });
@@ -41,15 +43,12 @@ public class SessionCreateController extends SessionController {
      * Creates a session with selected inputs from view
      * @return string message to be displayed
      */
-    private String createSession() {
-        int hour = view.getSelectedHour();
-        int minute = view.getSelectedMinute();
+    public String createSession(int hour, int minute, LocalDate selectedDate) {
         
-        if(hour==-1 || minute==-1) {
+        if(hour < 0 || hour > 23 || minute < 0 || minute > 59) {
             return "Invalid hours/minutes";
         }
         else {
-            LocalDate selectedDate = view.getSelectedDate();
             LocalTime selectedTime = LocalTime.of(hour, minute);
             LocalTime timeNow = LocalTime.now();
             
@@ -62,7 +61,8 @@ public class SessionCreateController extends SessionController {
                 LocalTime timeTo = selectedTime.plusHours(selectedMovie.getHourLength());
                 timeTo = timeTo.plusMinutes(selectedMovie.getMinuteLength());
                 
-                if(selectedTime.compareTo(LocalTime.MIDNIGHT) < 0 && timeTo.compareTo(LocalTime.MIDNIGHT) >= 0) {
+                //check if session goes to the next day
+                if(selectedTime.getHour() > timeTo.getHour()) {
                     return "Finishing time can't be past 23:59";
                 }
                 else {

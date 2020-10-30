@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class MovieBookingModel extends Observable implements Runnable{
 
     private Connection conn;
-    public String url = "jdbc:derby://localhost:1527/MovieBookingAppDB;create=true";  //url of the DB host
+    public String url = "jdbc:derby:MovieBookingAppDB;create=true";  //url of the DB host
     public String username = "carlocarbonilla";  //your DB username
     public String password = "18025686";   //your DB password
     private HashMap<Integer, Location> locations;

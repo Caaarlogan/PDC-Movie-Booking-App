@@ -1,6 +1,7 @@
 package com.carlo.pdc_b;
 
 /**
+ * Class that represents a movie with it's title and time length
  * @author Carlo Carbonilla
  */
 

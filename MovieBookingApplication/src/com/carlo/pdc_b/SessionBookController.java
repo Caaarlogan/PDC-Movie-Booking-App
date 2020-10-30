@@ -10,6 +10,8 @@ import java.util.List;
 import javax.swing.JButton;
 
 /**
+ * Controller class that modifies data model through session booking and
+ * seat selecting view interactions
  * @author Carlo Carbonilla
  */
 public class SessionBookController extends SessionController{
@@ -87,7 +89,7 @@ public class SessionBookController extends SessionController{
 
             HashMap<String, JButton> seatButtons = seatView.getSeatButtons();
 
-            //Iterate through all seats
+            //Iterate through all seat buttons and add listeners
             for (String seatCode : seatButtons.keySet()) {
                 
                 JButton button = seatButtons.get(seatCode); //get button of corresponding seat code
@@ -98,9 +100,9 @@ public class SessionBookController extends SessionController{
 
                         //if seat has been reselected
                         if(selectedSeats.contains(seatCode)) {
-                            selectedSeats.remove(seatCode); //remove seat from list of selected seats
                             
-                            //clear and add seats for booked seats
+                            //remove seat from list of selected seats
+                            selectedSeats.remove(seatCode); 
                             String message = "Booked Seats: ";
                             for(String code : selectedSeats) {
                                 message += code + " ";
@@ -108,13 +110,17 @@ public class SessionBookController extends SessionController{
                             
                             seatView.getBookedSeats().setText(message);
                             
+                            //Turn seat back to white
                             button.setBackground(Color.WHITE);
                         }
                         else { //If seat hasn't been selected
+                            
+                            //add seat to selected seats
                             String message = seatView.getBookedSeats().getText() + seatCode + " ";
                             seatView.getBookedSeats().setText(message);
                             selectedSeats.add(seatCode);
                             
+                            //color seat green
                             button.setBackground(Color.GREEN);
                         }
                     }

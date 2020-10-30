@@ -8,8 +8,8 @@ public class Cinema
 {
     private int id;
     private int cinemaNum; //cinema number
-    private int width; //dimensions of cinema seats
-    private int height;
+    private int width; //how many seats horizontally
+    private int height; //how many seats vertically
 
     public Cinema(int id, int cinemaNum, int width, int height)
     {
