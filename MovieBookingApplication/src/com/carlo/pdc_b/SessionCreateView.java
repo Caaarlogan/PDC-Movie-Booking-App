@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 /**
+ * GUI View of session creator application
  * @author Carlo Carbonilla
  */
 
@@ -20,10 +21,10 @@ public class SessionCreateView extends SessionView{
     private JLabel timeMinutes;
     private JLabel dateTimeHelp;
     private JComboBox cinemaSelect;
-    private JTextField timeHoursSelect;
+    private JTextField timeHoursSelect; //text fields to input time of session
     private JTextField timeMinutesSelect;
     private JButton create;
-    protected boolean constructorFinished;
+    protected boolean constructorFinished; //if gui has been created
     protected DateTimeFormatter timeFormat; //format time is printed in
     
     /**
@@ -59,6 +60,7 @@ public class SessionCreateView extends SessionView{
         
         updateCinemas();
         
+        //By default get time now
         LocalTime timeNow = LocalTime.now();
         int hours = timeNow.getHour();
         int minutes = timeNow.getMinute();
@@ -78,18 +80,17 @@ public class SessionCreateView extends SessionView{
         create.setLocation(10,190);
         add(create);
         
+        //Labels to help users with time format
         dateTimeHelp = new JLabel("Hours (0-23), Minutes (0-59)");
         dateTimeHelp.setSize(350,50);
         dateTimeHelp.setLocation(10,210);
         add(dateTimeHelp);
         
-        
-        
         constructorFinished = true;
     }
     
     /**
-     * Nothing to update as it's updated in the model class
+     * Nothing as session create only adds
      * @param model
      * @param arg 
      */
@@ -124,6 +125,7 @@ public class SessionCreateView extends SessionView{
         return create;
     }
     
+    //get user input hour time
     public int getSelectedHour() {
         String hours = timeHoursSelect.getText();
         
@@ -139,6 +141,7 @@ public class SessionCreateView extends SessionView{
         return -1; //return -1 if invalid hour input
     }
     
+    //get user input minute time
     public int getSelectedMinute() {
         String minutes = timeMinutesSelect.getText();
         
@@ -154,6 +157,7 @@ public class SessionCreateView extends SessionView{
         return -1; //return -1 if invalid minute input
     }
     
+    //get user selected cinema
     public Cinema getSelectedCinema() {
         int i = cinemaSelect.getSelectedIndex();
         Location location = getSelectedLocation();

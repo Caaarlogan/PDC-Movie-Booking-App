@@ -19,13 +19,13 @@ public class SessionView extends JPanel implements Observer{
     protected JLabel location;
     protected JLabel movie;
     protected JLabel date;
-    protected JLabel error;
-    protected JComboBox locationSelect;
-    protected JComboBox movieSelect;
-    protected JComboBox dateSelect;
+    protected JLabel error; //label used for error messages
+    protected JComboBox locationSelect; //drop downs to select location,
+    protected JComboBox movieSelect; //movie
+    protected JComboBox dateSelect; //and date of session
     protected MovieBookingModel model; //The model to which this view is attached
-    protected String[] locations;
-    protected String[] movies;
+    protected String[] locations; //arrays to store string of locations
+    protected String[] movies; // and movies
     protected String[] dates;
     protected DateTimeFormatter dateFormat; //format date is printed in
     
@@ -81,6 +81,7 @@ public class SessionView extends JPanel implements Observer{
         
     }
     
+    //Populate dates with days from today up to a week later
     protected void updateDates() {
         dates = new String[7];
         LocalDate dateNow = LocalDate.now();
@@ -90,6 +91,7 @@ public class SessionView extends JPanel implements Observer{
         }
     }
     
+    //Populate array with locations from data model
     protected void updateLocations() {
         HashMap<Integer,Location> locationMap = model.getLocations();
         Set<Integer> locationIDs = locationMap.keySet();
@@ -105,6 +107,7 @@ public class SessionView extends JPanel implements Observer{
         }
     }
     
+    //Populate arrays with movies from data model
     protected void updateMovies() {
         HashMap<Integer,Movie> movieMap = model.getMovies();
         Set<Integer> movieIDs = movieMap.keySet();

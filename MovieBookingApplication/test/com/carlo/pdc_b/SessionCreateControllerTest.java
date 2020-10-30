@@ -11,14 +11,15 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
- * @author carbo
+ * Unit Tests for session creator application
+ * @author Carlo Carbonilla
  */
 public class SessionCreateControllerTest {
     
     public SessionCreateControllerTest() {
     }
-
+    
+    //Test what happens when you input time of less than zero
     @Test
     public void hourMinuteLessThanZero() {
         SessionCreateController scc = new SessionCreateController();
@@ -27,6 +28,8 @@ public class SessionCreateControllerTest {
         assertEquals(output, "Invalid hours/minutes");
     }
     
+    //Test what happens when you input time of greater than 23 hours and
+    //59 minutes
     @Test
     public void hourMinuteGreaterThanMax() {
         SessionCreateController scc = new SessionCreateController();
@@ -35,6 +38,7 @@ public class SessionCreateControllerTest {
         assertEquals(output, "Invalid hours/minutes");
     }
     
+    //Test when creating session in the past
     @Test
     public void pastSession() {
         SessionCreateController scc = new SessionCreateController();
@@ -46,6 +50,7 @@ public class SessionCreateControllerTest {
         assertEquals(output, "Session can't be in the past");
     }
     
+    //Test when creating session that goes to the next day
     @Test
     public void sessionGoingToNextDay() {
         SessionCreateController scc = new SessionCreateController();
@@ -54,6 +59,7 @@ public class SessionCreateControllerTest {
         assertEquals(output, "Finishing time can't be past 23:59");
     }
     
+    //Test creating a session in midnight
     @Test
     public void midnightSession() {
         SessionCreateController scc = new SessionCreateController();

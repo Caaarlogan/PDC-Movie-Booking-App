@@ -24,12 +24,12 @@ import java.util.logging.Logger;
 public class MovieBookingModel extends Observable implements Runnable{
 
     private Connection conn;
-    public String url = "jdbc:derby:MovieBookingAppDB;create=true";  //url of the DB host
+    public String url = "jdbc:derby:MovieBookingAppDB;create=true";  //url of embedded DB host
     public String username = "carlocarbonilla";  //your DB username
     public String password = "18025686";   //your DB password
-    private HashMap<Integer, Location> locations;
-    private HashMap<Integer, Movie> movies;
-    private HashMap<Integer, Session> sessions;
+    private HashMap<Integer, Location> locations; //id key location value
+    private HashMap<Integer, Movie> movies; //id key movie value
+    private HashMap<Integer, Session> sessions; //id key session value
     private static int sessionCounter; //gets the latest session ID
     private static int bookingCounter; //gets the latest booking ID
     private DateTimeFormatter dateFormat;
@@ -68,6 +68,9 @@ public class MovieBookingModel extends Observable implements Runnable{
         }
     }
     
+    /**
+     * Get movies from database and populate hash map
+     */
     private void initializeMovies() {
         try {
             Statement statement = conn.createStatement();
@@ -87,7 +90,10 @@ public class MovieBookingModel extends Observable implements Runnable{
             Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    /**
+     * Get cinemas from database and populate hash map
+     */
     private void initializeCinemas() {
         try {
             Statement statement = conn.createStatement();
@@ -109,7 +115,10 @@ public class MovieBookingModel extends Observable implements Runnable{
             Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    /**
+     * Get locations from database and populate hash map
+     */
     private void initializeLocations() {
         try {
             Statement statement = conn.createStatement();
@@ -128,7 +137,10 @@ public class MovieBookingModel extends Observable implements Runnable{
             Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    /**
+     * Get sessions from database and populate hash map
+     */
     public void initializeSessions() {
         sessionCounter = 1;
         
@@ -152,76 +164,15 @@ public class MovieBookingModel extends Observable implements Runnable{
                 Session session = new Session(id, location, date, movie, cinema, timeFrom, timeTo);
                 sessions.put(id, session);
 
-                sessionCounter++;
+                sessionCounter++; //increment session ID
             }
         }
         catch (SQLException ex) {
             Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    //Get sessions with specified location, date, and movie
-    public List<Session> getSessionsResults(Location location, LocalDate date, Movie movie) {
-        List<Session> sessionResults = new ArrayList();
-
-        try {
-            Statement statement = conn.createStatement();
-
-            String query = "SELECT SESSION_ID FROM SESSIONS WHERE\n"
-                    + "SESSION_LOCATION=? AND SESSION_DATE=? AND SESSION_MOVIE=?";
-
-            PreparedStatement ps = conn.prepareStatement(query);
-
-            ps.setString(1, location.getID() + "");
-            ps.setString(2, date.format(dateFormat));
-            ps.setString(3, movie.getID() + "");
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt("SESSION_ID");
-                Session session = sessions.get(id);
-                sessionResults.add(session);
-            }
-        }
-        catch (SQLException ex) {
-            Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return sessionResults;
-    }
-
-    public void addSession(Location location, LocalDate date, Movie movie, Cinema cinema, LocalTime timeFrom, LocalTime timeTo) {
-
-        Session session = new Session(sessionCounter, location, date, movie, cinema, timeFrom, timeTo);
-        sessions.put(sessionCounter, session);
-
-        try {
-            Statement statement = conn.createStatement();
-
-            String query = "INSERT INTO SESSIONS VALUES (?,?,?,?,?,?,?)";
-
-            PreparedStatement ps = conn.prepareStatement(query);
-
-            ps.setString(1, sessionCounter + "");
-            ps.setString(2, location.getID() + "");
-            ps.setString(3, date.format(dateFormat));
-            ps.setString(4, movie.getID() + "");
-            ps.setString(5, cinema.getID() + "");
-            ps.setString(6, timeFrom.format(timeFormat));
-            ps.setString(7, timeTo.format(timeFormat));
-
-            ps.executeUpdate();
-            
-            sessionCounter++;
-            
-            setChanged();
-        }
-        catch (SQLException ex) {
-            Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
+    
+    //Get bookings from database and fill hash map
     public void initializeBookings() {
         bookingCounter = 1;
 
@@ -248,7 +199,71 @@ public class MovieBookingModel extends Observable implements Runnable{
             Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    //Get sessions filtered with specified location, date, movie, and return list
+    //Used for session booking application
+    public List<Session> getSessionsResults(Location location, LocalDate date, Movie movie) {
+        List<Session> sessionResults = new ArrayList();
 
+        try {
+            Statement statement = conn.createStatement();
+
+            String query = "SELECT SESSION_ID FROM SESSIONS WHERE\n"
+                    + "SESSION_LOCATION=? AND SESSION_DATE=? AND SESSION_MOVIE=?";
+
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            ps.setString(1, location.getID() + ""); //location ID
+            ps.setString(2, date.format(dateFormat)); //date
+            ps.setString(3, movie.getID() + ""); //movie ID
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("SESSION_ID");
+                Session session = sessions.get(id);
+                sessionResults.add(session);
+            }
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return sessionResults;
+    }
+    
+    //Add session to hash map and database with the given session attributes
+    public void addSession(Location location, LocalDate date, Movie movie, Cinema cinema, LocalTime timeFrom, LocalTime timeTo) {
+
+        Session session = new Session(sessionCounter, location, date, movie, cinema, timeFrom, timeTo);
+        sessions.put(sessionCounter, session);
+
+        try {
+            Statement statement = conn.createStatement();
+
+            String query = "INSERT INTO SESSIONS VALUES (?,?,?,?,?,?,?)";
+
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            ps.setString(1, sessionCounter + ""); //session ID
+            ps.setString(2, location.getID() + ""); //location ID
+            ps.setString(3, date.format(dateFormat)); //date
+            ps.setString(4, movie.getID() + ""); //movie ID
+            ps.setString(5, cinema.getID() + ""); //cinema Num
+            ps.setString(6, timeFrom.format(timeFormat)); //starting time
+            ps.setString(7, timeTo.format(timeFormat)); //finishing time
+
+            ps.executeUpdate();
+            
+            sessionCounter++; //increment sessionID
+            
+            setChanged(); //database has been modified
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(MovieBookingModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * Book seat with given session ID, row, and column
      *
@@ -258,7 +273,7 @@ public class MovieBookingModel extends Observable implements Runnable{
      */
     public void bookSeat(int sessionID, char row, int column) {
         Session session = sessions.get(sessionID);
-        session.book(row - 65, column - 1);
+        session.book(row - 65, column - 1); //turn seat code to array index
 
         try {
             Statement statement = conn.createStatement();

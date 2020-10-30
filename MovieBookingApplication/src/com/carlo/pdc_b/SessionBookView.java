@@ -10,12 +10,13 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 /**
+ * View of GUI where you can select sessions
  * @author Carlo Carbonilla
  */
 public class SessionBookView extends SessionView {
 
     private JLabel sessions;
-    private JList sessionSelect;
+    private JList sessionSelect; //sessions you can choose from given filters
     private DefaultListModel<String> sessionModel;
     private JScrollPane sessionScroll;
     private JButton seats;
@@ -27,7 +28,8 @@ public class SessionBookView extends SessionView {
         sessions.setSize(300, 20);
         sessions.setLocation(10, 105);
         add(sessions);
-
+        
+        //List of available sessions given filters
         sessionModel = new DefaultListModel<>();
         sessionSelect = new JList();
         sessionSelect.setModel(sessionModel);
@@ -37,7 +39,8 @@ public class SessionBookView extends SessionView {
         sessionScroll.setSize(460, 150);
         sessionScroll.setLocation(10, 130);
         add(sessionScroll);
-
+        
+        //Get availabel sessions
         updateSessions();
 
         seats = new JButton("Seats");
@@ -45,7 +48,8 @@ public class SessionBookView extends SessionView {
         seats.setLocation(10, 290);
         add(seats);
     }
-
+    
+    //Update used for MVC
     public void update(Observable model, Object args) {
         updateSessions();
     }

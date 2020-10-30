@@ -1,6 +1,7 @@
 package com.carlo.pdc_b;
 
 /**
+ * Main method of session creator
  * @author Carlo Carbonilla
  */
 
