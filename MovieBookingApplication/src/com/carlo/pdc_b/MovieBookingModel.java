@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class MovieBookingModel extends Observable implements Runnable{
 
     private Connection conn;
-    public String url = "jdbc:derby:MovieBookingAppDB;create=true";  //url of embedded DB host
+    public String url = "jdbc:derby:MovieBookingAppDB;create=true";  //url of embedded DB
     public String username = "carlocarbonilla";  //your DB username
     public String password = "18025686";   //your DB password
     private HashMap<Integer, Location> locations; //id key location value
@@ -44,7 +44,9 @@ public class MovieBookingModel extends Observable implements Runnable{
         timeFormat = DateTimeFormatter.ofPattern("HH:mm");
 
         try {
-            this.conn = DriverManager.getConnection(url, username, password);
+            this.conn = DriverManager.getConnection(url, username, password); //connect to DB
+            
+            //Initialize and populate data and information for model
             initializeMovies();
             initializeLocations();
             initializeCinemas();

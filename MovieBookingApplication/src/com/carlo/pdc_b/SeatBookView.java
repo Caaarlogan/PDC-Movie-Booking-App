@@ -6,25 +6,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
+ * GUI View of selecting seats when booking a movie session
  * @author Carlo Carbonilla
  */
 public class SeatBookView extends JPanel implements Observer {
 
-    private JLabel screen;
-    private JLabel bookedSeats;
-    private JButton book;
-    private JButton back;
+    private JLabel screen; //Label that shows the movie screen
+    private JLabel bookedSeats; //String that stores booked seats
+    private JButton book; //book button to book seats
+    private JButton back; //back button to get back to sessions
     private HashMap<String, JButton> seatButtons; //int seat code key, button value
-    private List<String> selectedSeats;
-    private int width;
-    private int height;
+    private List<String> selectedSeats; //List of selected seats
+    private int width; //number of cinema seats horizontally
+    private int height; //number of cinema seats vertically
     private MovieBookingModel model;
     private int sessionID;
 
@@ -41,9 +40,7 @@ public class SeatBookView extends JPanel implements Observer {
 
         width = session.getCinema().getWidth();
         height = session.getCinema().getHeight();
-
         
-
         screen = new JLabel("SCREEN");
         screen.setSize(100, 20);
         screen.setLocation((width / 2) * 30, 40 + (height * 30));
@@ -70,7 +67,11 @@ public class SeatBookView extends JPanel implements Observer {
     public void update(Observable model, Object arg) {
         updateSeats();
     }
-
+    
+    /**
+     * Goes through seats and checked whether they're booked or not and
+     * color codes them white (not booked), or red (booked)
+     */
     private void updateSeats() {
         
         Session session = model.getSessions().get(sessionID);
